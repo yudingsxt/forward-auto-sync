@@ -26,10 +26,36 @@ echo "[]" > "$TEMP_WIDGETS"
 find "$WIDGETS_DIR" -name "*.fwd" -type f | while read -r fwd_file; do
     echo "处理文件: $fwd_file"
     
-    # 检查文件是否为有效JSON
+    # 检查文件是否为有效JSON，如果不是则尝试修复常见问题
     if ! jq empty "$fwd_file" 2>/dev/null; then
-        echo "警告: $fwd_file 不是有效的JSON文件，跳过"
-        continue
+        echo "警告: $fwd_file JSON格式有误，尝试自动修复..."
+        
+        # 创建临时文件进行修复
+        temp_file="${fwd_file}.tmp"
+        cp "$fwd_file" "$temp_file"
+        
+        # 修复多种常见的JSON格式问题
+        # 1. 修复数组末尾多余逗号: },\n  ]
+        sed -i '' '/},$/{
+N
+s/},\n\([ \t]*\]\)/}\n\1/
+}' "$temp_file"
+        
+        # 2. 修复对象末尾多余逗号: },\n}
+        sed -i '' '/},$/{
+N
+s/},\n\([ \t]*}\)/}\n\1/
+}' "$temp_file"
+        
+        # 再次检查是否修复成功
+        if jq empty "$temp_file" 2>/dev/null; then
+            mv "$temp_file" "$fwd_file"
+            echo "✅ $fwd_file JSON格式修复成功"
+        else
+            rm -f "$temp_file"
+            echo "错误: $fwd_file 修复失败，跳过此文件"
+            continue
+        fi
     fi
     
     # 提取widgets数组并合并
