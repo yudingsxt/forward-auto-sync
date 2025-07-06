@@ -192,6 +192,26 @@ if command -v jq >/dev/null 2>&1; then
     mv "${OUTPUT_FILE}.tmp" "$OUTPUT_FILE"
 fi
 
+# 生成简化格式的widgets.fwd文件（供软件识别）
+echo "正在生成简化格式的widgets.fwd文件..."
+SIMPLE_OUTPUT="$PROJECT_ROOT/widgets.fwd"
+
+# 转换为简化格式
+jq '{
+  title: .title,
+  description: .description,
+  icon: .icon,
+  widgets: [.widgets[] | {
+    id: .id,
+    title: .title,
+    description: .description,
+    requiredVersion: .requiredVersion,
+    version: .version,
+    author: .author,
+    url: .url
+  }]
+}' "$OUTPUT_FILE" > "$SIMPLE_OUTPUT"
+
 # 清理临时文件
 rm -f "$TEMP_WIDGETS" "$TEMP_DEDUPLICATED"
 
@@ -199,6 +219,7 @@ rm -f "$TEMP_WIDGETS" "$TEMP_DEDUPLICATED"
 WIDGET_COUNT=$(jq '.widgets | length' "$OUTPUT_FILE")
 echo "汇聚完成! 共合并 $WIDGET_COUNT 个widgets"
 echo "输出文件: $OUTPUT_FILE"
+echo "简化格式文件: $SIMPLE_OUTPUT"
 
 # 显示汇聚文件的基本信息
 echo "\n=== 汇聚文件信息 ==="
