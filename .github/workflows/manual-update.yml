@@ -1,0 +1,105 @@
+name: 手动更新模块库
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository_name:
+        description: '指定要更新的仓库名称（留空则更新所有）'
+        required: false
+        type: string
+      force_update:
+        description: '强制更新（即使没有变更）'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  manual-sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: 设置Git配置
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    
+    - name: 安装依赖
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq rsync
+    
+    - name: 显示输入参数
+      run: |
+        echo "🎯 手动更新参数:"
+        echo "📦 指定仓库: ${{ github.event.inputs.repository_name || '全部' }}"
+        echo "🔄 强制更新: ${{ github.event.inputs.force_update }}"
+    
+    - name: 设置脚本权限
+      run: chmod +x scripts/update.sh
+    
+    - name: 执行更新
+      env:
+        TARGET_REPO: ${{ github.event.inputs.repository_name }}
+        FORCE_UPDATE: ${{ github.event.inputs.force_update }}
+      run: |
+        # 如果指定了仓库名称，修改配置文件只包含该仓库
+        if [ -n "$TARGET_REPO" ]; then
+          echo "🎯 只更新指定仓库: $TARGET_REPO"
+          jq --arg name "$TARGET_REPO" '.repositories = [.repositories[] | select(.name == $name)]' config/repos.json > config/repos.tmp.json
+          mv config/repos.tmp.json config/repos.json
+        fi
+        
+        bash scripts/update.sh
+    
+    - name: 检查是否有更改
+      id: check-changes
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: 提交更改
+      if: steps.check-changes.outputs.has_changes == 'true' || github.event.inputs.force_update == 'true'
+      run: |
+        NEW_VERSION=$(cat package.json | jq -r '.version')
+        git add .
+        
+        COMMIT_MSG="🔧 手动更新模块库 v$NEW_VERSION
+        
+        - 更新时间: $(date '+%Y-%m-%d %H:%M:%S')
+        - 触发方式: 手动执行
+        - 指定仓库: ${{ github.event.inputs.repository_name || '全部' }}
+        - 强制更新: ${{ github.event.inputs.force_update }}
+        - 版本号: v$NEW_VERSION"
+        
+        git commit -m "$COMMIT_MSG"
+        git push
+    
+    - name: 创建Release标签
+      if: steps.check-changes.outputs.has_changes == 'true'
+      run: |
+        NEW_VERSION=$(cat package.json | jq -r '.version')
+        git tag -a "v$NEW_VERSION" -m "手动更新 v$NEW_VERSION"
+        git push origin "v$NEW_VERSION"
+    
+    - name: 输出结果
+      run: |
+        if [ "${{ steps.check-changes.outputs.has_changes }}" == "true" ]; then
+          echo "✅ 手动更新完成并已提交"
+          NEW_VERSION=$(cat package.json | jq -r '.version')
+          echo "📦 新版本: v$NEW_VERSION"
+          echo "🎯 更新范围: ${{ github.event.inputs.repository_name || '全部仓库' }}"
+        else
+          echo "ℹ️ 没有发现更新"
+          if [ "${{ github.event.inputs.force_update }}" == "true" ]; then
+            echo "⚠️ 强制更新已启用但无内容变更"
+          fi
+        fi

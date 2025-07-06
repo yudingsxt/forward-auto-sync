@@ -1,0 +1,21 @@
+{
+  "name": "forward-auto-updater",
+  "version": "1.0.0",
+  "description": "自动更新模块库项目",
+  "main": "index.js",
+  "scripts": {
+    "update": "bash scripts/update.sh",
+    "version": "npm version patch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ershiwushideshuimian/forward.git"
+  },
+  "keywords": [
+    "automation",
+    "github-actions",
+    "module-updater"
+  ],
+  "author": "ershiwushideshuimian",
+  "license": "MIT"
+}

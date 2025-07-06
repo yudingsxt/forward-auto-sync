@@ -1,0 +1,16 @@
+{
+  "repositories": [
+    {
+      "name": "ForwardWidgets",
+      "url": "https://github.com/huangxd-/ForwardWidgets",
+      "branch": "main",
+      "target_dir": "widgets/ForwardWidgets",
+      "description": "示例模块库"
+    }
+  ],
+  "settings": {
+    "auto_commit": true,
+    "update_frequency": "daily",
+    "timezone": "Asia/Shanghai"
+  }
+}
