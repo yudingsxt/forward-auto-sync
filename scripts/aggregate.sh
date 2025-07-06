@@ -2,10 +2,62 @@
 
 # 汇聚所有ForwardWidgets仓库的.fwd文件
 # 生成统一的forward-widgets.fwd文件
+# 支持去重和版本管理
 
 set -e
 
 echo "开始汇聚Widget模块..."
+
+# 版本比较函数
+compare_versions() {
+    local version1="$1"
+    local version2="$2"
+    
+    # 移除版本号中的非数字字符，保留点号
+    version1=$(echo "$version1" | sed 's/[^0-9.]//g')
+    version2=$(echo "$version2" | sed 's/[^0-9.]//g')
+    
+    # 使用sort -V进行版本比较
+    if printf '%s\n%s\n' "$version1" "$version2" | sort -V -C; then
+        echo "0"  # version1 <= version2
+    else
+        echo "1"  # version1 > version2
+    fi
+}
+
+# 去重函数
+deduplicate_widgets() {
+    local input_file="$1"
+    local output_file="$2"
+    
+    # 使用jq进行去重，保留最新版本
+    jq '
+        group_by(.id) | 
+        map(
+            if length > 1 then
+                (sort_by(.version) | reverse | .[0])
+            else
+                .[0]
+            end
+        )
+    ' "$input_file" > "$output_file"
+    
+    echo "去重完成，处理了 $(jq 'length' "$input_file") 个模块，去重后剩余 $(jq 'length' "$output_file") 个模块"
+}
+
+# 模块校验函数
+validate_widget() {
+    local widget="$1"
+    local required_fields=("id" "title" "description" "author" "site" "version" "requiredVersion" "modules" "url")
+    
+    for field in "${required_fields[@]}"; do
+        if ! echo "$widget" | jq -e ".$field" >/dev/null 2>&1; then
+            echo "警告: 模块缺少必要字段: $field"
+            return 1
+        fi
+    done
+    return 0
+}
 
 # 项目根目录
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -103,13 +155,34 @@ find "$WIDGETS_DIR" -name "*.fwd" -type f | while read -r fwd_file; do
     fi
 done
 
+# 去重处理
+echo "开始去重处理..."
+TEMP_DEDUPLICATED="$(mktemp)"
+deduplicate_widgets "$TEMP_WIDGETS" "$TEMP_DEDUPLICATED"
+
+# 校验模块
+echo "开始校验模块..."
+VALID_COUNT=0
+INVALID_COUNT=0
+
+while IFS= read -r widget; do
+    if validate_widget "$widget"; then
+        ((VALID_COUNT++))
+    else
+        ((INVALID_COUNT++))
+        echo "模块校验失败: $(echo "$widget" | jq -r '.id // "unknown"')"
+    fi
+done < <(jq -c '.[]' "$TEMP_DEDUPLICATED")
+
+echo "校验完成: 有效模块 $VALID_COUNT 个，无效模块 $INVALID_COUNT 个"
+
 # 生成最终的汇聚文件
 cat > "$OUTPUT_FILE" << EOF
 {
   "title": "Forward Widgets Collection",
   "description": "汇聚所有ForwardWidgets仓库的模块集合",
   "icon": "https://assets.vvebo.vip/scripts/icon.png",
-  "widgets": $(cat "$TEMP_WIDGETS")
+  "widgets": $(cat "$TEMP_DEDUPLICATED")
 }
 EOF
 
@@ -120,7 +193,7 @@ if command -v jq >/dev/null 2>&1; then
 fi
 
 # 清理临时文件
-rm -f "$TEMP_WIDGETS"
+rm -f "$TEMP_WIDGETS" "$TEMP_DEDUPLICATED"
 
 # 统计结果
 WIDGET_COUNT=$(jq '.widgets | length' "$OUTPUT_FILE")
@@ -132,8 +205,19 @@ echo "\n=== 汇聚文件信息 ==="
 echo "标题: $(jq -r '.title' "$OUTPUT_FILE")"
 echo "描述: $(jq -r '.description' "$OUTPUT_FILE")"
 echo "Widget数量: $WIDGET_COUNT"
+echo "有效模块: $VALID_COUNT 个"
+echo "无效模块: $INVALID_COUNT 个"
+
+# 检查重复ID
+DUPLICATE_IDS=$(jq -r '.widgets | group_by(.id) | map(select(length > 1)) | map(.[0].id) | .[]' "$OUTPUT_FILE" 2>/dev/null || echo "")
+if [ -n "$DUPLICATE_IDS" ]; then
+    echo "\n⚠️  警告: 发现重复ID:"
+    echo "$DUPLICATE_IDS"
+else
+    echo "\n✅ 无重复ID，去重成功"
+fi
 
 echo "\n=== Widget列表 ==="
-jq -r '.widgets[] | "- \(.id): \(.title) (v\(.version))"' "$OUTPUT_FILE"
+jq -r '.widgets[] | "- \(.id): \(.title) (v\(.version)) - \(.author)"' "$OUTPUT_FILE"
 
 echo "\nWidget汇聚完成!"
