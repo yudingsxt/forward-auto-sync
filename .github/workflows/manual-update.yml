@@ -19,6 +19,8 @@ jobs:
     permissions:
       contents: write
       actions: read
+      metadata: read
+      pull-requests: write
     
     steps:
     - name: 检出代码
@@ -27,10 +29,23 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
     
+    - name: 验证权限和环境
+      run: |
+        echo "🔍 验证手动执行环境..."
+        echo "📋 当前用户: $(whoami)"
+        echo "📁 工作目录: $(pwd)"
+        echo "🔑 Git配置验证..."
+        git --version
+        echo "📦 Node.js版本: $(node --version)"
+        echo "🛠️ jq版本: $(jq --version)"
+        
     - name: 设置Git配置
       run: |
+        echo "⚙️ 配置Git用户信息..."
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git config --global init.defaultBranch main
+        echo "✅ Git配置完成"
     
     - name: 设置Node.js环境
       uses: actions/setup-node@v4
@@ -56,14 +71,37 @@ jobs:
         TARGET_REPO: ${{ github.event.inputs.repository_name }}
         FORCE_UPDATE: ${{ github.event.inputs.force_update }}
       run: |
+        echo "🚀 开始手动更新..."
+        echo "📅 执行时间: $(date '+%Y-%m-%d %H:%M:%S')"
+        echo "🎯 目标仓库: ${TARGET_REPO:-'全部'}"
+        echo "🔄 强制更新: ${FORCE_UPDATE:-'false'}"
+        
+        # 设置错误处理
+        set -e
+        
         # 如果指定了仓库名称，修改配置文件只包含该仓库
         if [ -n "$TARGET_REPO" ]; then
           echo "🎯 只更新指定仓库: $TARGET_REPO"
-          jq --arg name "$TARGET_REPO" '.repositories = [.repositories[] | select(.name == $name)]' config/repos.json > config/repos.tmp.json
-          mv config/repos.tmp.json config/repos.json
+          if jq --arg name "$TARGET_REPO" '.repositories = [.repositories[] | select(.name == $name)]' config/repos.json > config/repos.tmp.json; then
+            mv config/repos.tmp.json config/repos.json
+            echo "✅ 配置文件已更新为指定仓库"
+          else
+            echo "❌ 配置文件更新失败"
+            exit 1
+          fi
         fi
         
-        bash scripts/update.sh
+        # 执行更新脚本
+        if bash scripts/update.sh; then
+          echo "✅ 更新脚本执行成功"
+        else
+          echo "❌ 更新脚本执行失败"
+          exit 1
+        fi
+        
+        echo "📊 更新完成统计:"
+        echo "📁 工作目录文件数: $(find . -type f | wc -l)"
+        echo "📝 Git状态: $(git status --porcelain | wc -l) 个文件有变更"
     
     - name: 检查是否有更改
       id: check-changes
@@ -74,40 +112,104 @@ jobs:
           echo "has_changes=false" >> $GITHUB_OUTPUT
         fi
     
+    - name: 更新版本号
+      id: update-version
+      if: steps.check-changes.outputs.has_changes == 'true' || github.event.inputs.force_update == 'true'
+      run: |
+        echo "📝 更新版本号..."
+        CURRENT_VERSION=$(cat package.json | jq -r '.version')
+        echo "📋 当前版本: v$CURRENT_VERSION"
+        
+        # 计算新版本号（补丁版本+1）
+        NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+        echo "🆕 新版本: v$NEW_VERSION"
+        
+        # 更新package.json
+        jq --arg version "$NEW_VERSION" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
+        
+        echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "✅ 版本号更新完成"
+        
     - name: 提交更改
       if: steps.check-changes.outputs.has_changes == 'true' || github.event.inputs.force_update == 'true'
       run: |
-        NEW_VERSION=$(cat package.json | jq -r '.version')
+        NEW_VERSION=${{ steps.update-version.outputs.NEW_VERSION || 'unknown' }}
+        echo "📝 准备提交更改..."
+        echo "📋 版本: v$NEW_VERSION"
+        echo "🎯 目标仓库: ${{ github.event.inputs.repository_name || '全部' }}"
+        echo "🔄 强制更新: ${{ github.event.inputs.force_update }}"
+        
+        # 暂存所有更改
         git add .
         
+        # 检查暂存区（强制更新时跳过检查）
+        if [ "${{ github.event.inputs.force_update }}" != "true" ] && [ -z "$(git diff --cached --name-only)" ]; then
+          echo "⚠️ 暂存区为空，跳过提交"
+          exit 0
+        fi
+        
+        echo "📝 暂存的文件:"
+        git diff --cached --name-only || echo "强制更新模式"
+        
+        # 提交更改
         COMMIT_MSG="🔧 手动更新模块库 v$NEW_VERSION
         
         - 更新时间: $(date '+%Y-%m-%d %H:%M:%S')
         - 触发方式: 手动执行
         - 指定仓库: ${{ github.event.inputs.repository_name || '全部' }}
         - 强制更新: ${{ github.event.inputs.force_update }}
-        - 版本号: v$NEW_VERSION"
+        - 版本号: v$NEW_VERSION
+        - 更改文件: $(git diff --cached --name-only | wc -l) 个"
         
         git commit -m "$COMMIT_MSG"
-        git push
+        
+        # 推送更改
+        if git push; then
+          echo "✅ 代码推送成功"
+        else
+          echo "❌ 代码推送失败"
+          exit 1
+        fi
     
     - name: 创建Release标签
       if: steps.check-changes.outputs.has_changes == 'true'
       run: |
-        NEW_VERSION=$(cat package.json | jq -r '.version')
-        git tag -a "v$NEW_VERSION" -m "手动更新 v$NEW_VERSION"
-        git push origin "v$NEW_VERSION"
+        NEW_VERSION=${{ steps.update-version.outputs.NEW_VERSION || 'unknown' }}
+        echo "🏷️ 创建标签 v$NEW_VERSION..."
+        
+        # 创建标签
+        if git tag -a "v$NEW_VERSION" -m "手动更新 v$NEW_VERSION - $(date '+%Y-%m-%d %H:%M:%S')"; then
+          echo "✅ 标签创建成功"
+        else
+          echo "⚠️ 标签创建失败，可能已存在"
+        fi
+        
+        # 推送标签
+        if git push origin "v$NEW_VERSION"; then
+          echo "✅ 标签推送成功"
+        else
+          echo "❌ 标签推送失败"
+          exit 1
+        fi
     
     - name: 输出结果
       run: |
+        echo "📊 手动执行结果汇总:"
+        echo "⏰ 完成时间: $(date '+%Y-%m-%d %H:%M:%S')"
+        echo "🎯 目标仓库: ${{ github.event.inputs.repository_name || '全部仓库' }}"
+        echo "🔄 强制更新: ${{ github.event.inputs.force_update }}"
+        
         if [ "${{ steps.check-changes.outputs.has_changes }}" == "true" ]; then
+          NEW_VERSION=${{ steps.update-version.outputs.NEW_VERSION || 'unknown' }}
           echo "✅ 手动更新完成并已提交"
-          NEW_VERSION=$(cat package.json | jq -r '.version')
           echo "📦 新版本: v$NEW_VERSION"
-          echo "🎯 更新范围: ${{ github.event.inputs.repository_name || '全部仓库' }}"
+          echo "🏷️ 标签: v$NEW_VERSION"
+          echo "📝 提交信息: 手动更新模块库"
         else
           echo "ℹ️ 没有发现更新"
           if [ "${{ github.event.inputs.force_update }}" == "true" ]; then
             echo "⚠️ 强制更新已启用但无内容变更"
           fi
         fi
+        
+        echo "🎯 手动任务执行完成"

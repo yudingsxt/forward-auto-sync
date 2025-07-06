@@ -104,9 +104,9 @@ else
     echo "⚠️  汇聚脚本不存在，跳过汇聚步骤"
 fi
 
-# 如果有更新，提交更改
+# 如果有更新，记录日志
 if [ "$HAS_UPDATES" = true ]; then
-    echo "\n📝 更新版本号和日志..."
+    echo "\n📝 更新日志..."
     
     # 更新CHANGELOG
     if [ -f "$UPDATE_LOG.tmp" ]; then
@@ -120,17 +120,9 @@ if [ "$HAS_UPDATES" = true ]; then
         rm $UPDATE_LOG.tmp
     fi
     
-    # 在更新版本号之前，先暂存所有更改
-    echo "📋 暂存所有更改..."
-    git add .
-    
-    # 更新版本号（使用jq直接修改，避免npm依赖）
-    CURRENT_VERSION=$(cat package.json | jq -r '.version')
-    NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
-    jq --arg version "$NEW_VERSION" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
-    
-    echo "🎉 更新完成！新版本: v$NEW_VERSION"
+    echo "🎉 更新完成！"
     echo "📋 更新的仓库数量: $(echo "$repos" | wc -l)"
+    echo "📝 版本号将由GitHub Actions统一管理"
 else
     echo "\n✨ 所有仓库都是最新的！"
 fi
