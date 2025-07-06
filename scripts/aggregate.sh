@@ -16,7 +16,7 @@ echo "开始汇聚Widget模块..."
 # 项目根目录
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WIDGETS_DIR="$PROJECT_ROOT/widgets"
-OUTPUT_FILE="$PROJECT_ROOT/widgets.json"
+OUTPUT_FILE="$PROJECT_ROOT/widgets.fwd"
 TEMP_WIDGETS="$PROJECT_ROOT/temp_widgets.json"
 
 # 确保widgets目录存在
@@ -42,7 +42,12 @@ done
 total_widgets=$(jq 'length' "$TEMP_WIDGETS")
 echo "汇聚完成！共 $total_widgets 个widgets"
 
-# 直接输出widgets数组
-cp "$TEMP_WIDGETS" "$OUTPUT_FILE"
+# 生成.fwd格式文件
+jq -n --argjson widgets "$(cat "$TEMP_WIDGETS")" '{
+  "title": "Forward Widgets Collection",
+  "description": "汇聚的Forward Widgets模块集合",
+  "icon": "https://assets.vvebo.vip/scripts/icon.png",
+  "widgets": $widgets
+}' > "$OUTPUT_FILE"
 
 echo "输出文件: $OUTPUT_FILE"
