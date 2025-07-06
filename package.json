@@ -1,6 +1,6 @@
 {
   "name": "forward-auto-updater",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "自动更新模块库项目",
   "main": "index.js",
   "scripts": {

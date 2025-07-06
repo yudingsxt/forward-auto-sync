@@ -226,6 +226,12 @@ done < <(jq -c '.[]' "$TEMP_DEDUPLICATED")
 
 echo "校验完成: 有效模块 $VALID_COUNT 个，无效模块 $INVALID_COUNT 个"
 
+# 如果有无效模块，退出并返回错误码
+if [ $INVALID_COUNT -gt 0 ]; then
+    echo "❌ 发现 $INVALID_COUNT 个无效模块，校验失败"
+    exit 1
+fi
+
 # 生成最终的汇聚文件
 cat > "$OUTPUT_FILE" << EOF
 {

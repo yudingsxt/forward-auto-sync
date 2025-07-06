@@ -83,6 +83,7 @@ done
 # 汇聚Widget模块（在版本更新之前）
 echo "🔗 汇聚Widget模块..."
 if [ -f "scripts/aggregate.sh" ]; then
+    chmod +x scripts/aggregate.sh
     ./scripts/aggregate.sh
     if [ $? -eq 0 ]; then
         echo "✅ Widget汇聚完成！"
