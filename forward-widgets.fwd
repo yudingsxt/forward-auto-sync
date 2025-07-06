@@ -7,100 +7,45 @@
       "id": "douban",
       "title": "豆瓣",
       "description": "解析豆瓣片单，获取视频信息",
-      "author": "pack1r",
-      "site": "https://github.com/pack1r/ForwardWidgets",
-      "version": "1.0.0",
       "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "豆瓣",
-          "description": "解析豆瓣片单，获取视频信息",
-          "requiresWebView": false,
-          "functionName": "douban",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
+      "version": "1.0.0",
+      "author": "pack1r",
       "url": "https://raw.githubusercontent.com/pack1r/ForwardWidgets/refs/heads/main/widgets/douban.js"
     },
     {
       "id": "hot_picks",
       "title": "热门精选",
       "description": "获取最新热播剧和热门影片推荐",
-      "author": "两块",
-      "site": "https://github.com/2kuai/ForwardWidgets",
-      "version": "1.1.4",
       "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "热门精选",
-          "description": "获取最新热播剧和热门影片推荐",
-          "requiresWebView": false,
-          "functionName": "hot_picks",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
+      "version": "1.1.4",
+      "author": "两块",
       "url": "https://raw.githubusercontent.com/2kuai/ForwardWidgets/refs/heads/main/Widgets/HotPicks.js"
     },
     {
       "id": "imdb",
       "title": "IMDB",
       "description": "IMDB",
-      "author": "pack1r",
-      "site": "https://github.com/pack1r/ForwardWidgets",
-      "version": "1.0.0",
       "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "IMDB",
-          "description": "IMDB",
-          "requiresWebView": false,
-          "functionName": "imdb",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
+      "version": "1.0.0",
+      "author": "pack1r",
       "url": "https://raw.githubusercontent.com/pack1r/ForwardWidgets/refs/heads/main/widgets/imdb.js"
     },
     {
       "id": "movie_paradise",
       "title": "在线影院",
       "description": "获取在线电影、电视剧、动漫、综艺和短剧",
-      "author": "两块",
-      "site": "https://github.com/2kuai/ForwardWidgets",
-      "version": "1.0.0",
       "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "在线影院",
-          "description": "获取在线电影、电视剧、动漫、综艺和短剧",
-          "requiresWebView": false,
-          "functionName": "movie_paradise",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
+      "version": "1.0.0",
+      "author": "两块",
       "url": "https://raw.githubusercontent.com/2kuai/ForwardWidgets/refs/heads/main/Widgets/MovieParadise.js"
     },
     {
       "id": "tv_live",
       "title": "电视台",
       "description": "获取热门电视直播频道",
-      "author": "两块",
-      "site": "https://github.com/2kuai/ForwardWidgets",
-      "version": "1.0.1",
       "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "电视台",
-          "description": "获取热门电视直播频道",
-          "requiresWebView": false,
-          "functionName": "tv_live",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
+      "version": "1.0.1",
+      "author": "两块",
       "url": "https://raw.githubusercontent.com/2kuai/ForwardWidgets/refs/heads/main/Widgets/TvLive.js"
     }
   ]
