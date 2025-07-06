@@ -85,7 +85,7 @@
       "url": "https://github.com/EmrysChoo/ForwardWidgets/raw/refs/heads/main/Widgets/person_movie.js"
     },
     {
-      "id": "douban",
+      "id": "douban_pack1r",
       "title": "豆瓣",
       "description": "解析豆瓣片单，获取视频信息",
       "requiredVersion": "0.0.1",
