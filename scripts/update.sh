@@ -106,6 +106,19 @@ else
     echo "\n✨ 所有仓库都是最新的！"
 fi
 
+# 汇聚Widget模块
+echo "🔗 汇聚Widget模块..."
+if [ -f "scripts/aggregate.sh" ]; then
+    ./scripts/aggregate.sh
+    if [ $? -eq 0 ]; then
+        echo "✅ Widget汇聚完成！"
+    else
+        echo "⚠️  Widget汇聚失败，但不影响主流程"
+    fi
+else
+    echo "⚠️  汇聚脚本不存在，跳过汇聚步骤"
+fi
+
 # 清理临时文件
 echo "🧹 清理临时文件..."
 rm -rf $TEMP_DIR
