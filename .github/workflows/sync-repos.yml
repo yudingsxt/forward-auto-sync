@@ -26,6 +26,11 @@ jobs:
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
     
+    - name: 设置Node.js环境
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
     - name: 安装依赖
       run: |
         sudo apt-get update

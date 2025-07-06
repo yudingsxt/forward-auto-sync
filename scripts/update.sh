@@ -124,9 +124,10 @@ if [ "$HAS_UPDATES" = true ]; then
     echo "📋 暂存所有更改..."
     git add .
     
-    # 更新版本号
-    npm version patch --no-git-tag-version
-    NEW_VERSION=$(cat package.json | jq -r '.version')
+    # 更新版本号（使用jq直接修改，避免npm依赖）
+    CURRENT_VERSION=$(cat package.json | jq -r '.version')
+    NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+    jq --arg version "$NEW_VERSION" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
     
     echo "🎉 更新完成！新版本: v$NEW_VERSION"
     echo "📋 更新的仓库数量: $(echo "$repos" | wc -l)"

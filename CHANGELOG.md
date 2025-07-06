@@ -1,4 +1,20 @@
 # 更新日志\n
+## [ForwardWidgets-huangxd] - 2025-07-06 18:03:02
+- 仓库: https://github.com/huangxd-/ForwardWidgets
+- 分支: main
+- 新增: 08d91179387ccecfe879362d728e0f004c22b6b5
+
+## [ForwardWidgets-2kuai] - 2025-07-06 18:03:02
+- 仓库: https://github.com/2kuai/ForwardWidgets
+- 分支: main
+- 新增: 7d41f1d0d13921b016233bed0dc5d21e616371d3
+
+## [ForwardWidgets-pack1r] - 2025-07-06 18:03:02
+- 仓库: https://github.com/pack1r/ForwardWidgets
+- 分支: main
+- 新增: 64224559c8760133446b8beeb338503413174ade
+
+
 ## [1.0.20] - 2025-01-07
 
 ### 关键修复
