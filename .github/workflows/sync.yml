@@ -68,7 +68,30 @@ jobs:
       if: steps.check.outputs.has_changes == 'true' || github.event.inputs.force_update == 'true'
       run: |
         CURRENT=$(cat package.json | jq -r '.version')
-        NEW=$(echo $CURRENT | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+        echo "当前版本: $CURRENT"
+        
+        # 获取最新的标签版本
+        LATEST_TAG=$(git tag -l | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1)
+        if [ -n "$LATEST_TAG" ]; then
+          LATEST_VERSION=${LATEST_TAG#v}
+          echo "最新标签版本: $LATEST_VERSION"
+          
+          # 如果当前版本小于等于最新标签版本，则基于最新标签版本递增
+          if [ "$(printf '%s\n' "$CURRENT" "$LATEST_VERSION" | sort -V | head -1)" = "$CURRENT" ] && [ "$CURRENT" != "$LATEST_VERSION" ]; then
+            NEW=$(echo $LATEST_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+          else
+            NEW=$(echo $CURRENT | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+          fi
+        else
+          NEW=$(echo $CURRENT | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+        fi
+        
+        # 确保新版本标签不存在
+        while git rev-parse "v$NEW" >/dev/null 2>&1; do
+          NEW=$(echo $NEW | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+        done
+        
+        echo "新版本: $NEW"
         jq --arg version "$NEW" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
         echo "new_version=$NEW" >> $GITHUB_OUTPUT
         
