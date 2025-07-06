@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# 极简Widget汇聚脚本
-# 直接合并所有.fwd文件中的widgets，不进行校验和去重
+# Widget汇聚脚本
+# 合并所有.fwd文件中的widgets，并根据URL去重
 
 set -e
 
@@ -38,9 +38,14 @@ for fwd_file in "$WIDGETS_DIR"/*/*.fwd; do
     jq --argjson new_widgets "$widgets_array" '. + $new_widgets' "$TEMP_WIDGETS" > "${TEMP_WIDGETS}.tmp" && mv "${TEMP_WIDGETS}.tmp" "$TEMP_WIDGETS"
 done
 
+# 根据URL去重
+echo "开始根据URL去重..."
+jq 'group_by(.url) | map(.[0]) | sort_by(.title)' "$TEMP_WIDGETS" > "${TEMP_WIDGETS}.dedup"
+mv "${TEMP_WIDGETS}.dedup" "$TEMP_WIDGETS"
+
 # 生成最终文件
 total_widgets=$(jq 'length' "$TEMP_WIDGETS")
-echo "汇聚完成！共 $total_widgets 个widgets"
+echo "去重完成！共 $total_widgets 个widgets"
 
 # 生成.fwd格式文件
 jq -n --argjson widgets "$(cat "$TEMP_WIDGETS")" '{
