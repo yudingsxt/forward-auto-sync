@@ -57,11 +57,25 @@ find "$WIDGETS_DIR" -name "*.fwd" -type f | while read -r fwd_file; do
         fi
     fi
     
-    # 提取widgets数组并合并
+    # 提取widgets数组并合并，同时添加site字段
     if jq -e '.widgets' "$fwd_file" >/dev/null 2>&1; then
-        jq -s '.[0] + .[1].widgets' "$TEMP_WIDGETS" "$fwd_file" > "${TEMP_WIDGETS}.tmp"
+        # 为每个widget添加site字段
+        temp_processed="$(mktemp)"
+        jq '.widgets | map(
+            if .author == "huangxd" then
+                . + {"site": "https://github.com/huangxd-/ForwardWidgets"}
+            elif .author == "两块" then
+                . + {"site": "https://github.com/2kuai/ForwardWidgets"}
+            else
+                . + {"site": "https://github.com/unknown/ForwardWidgets"}
+            end
+        )' "$fwd_file" > "$temp_processed"
+        
+        # 合并到主文件
+        jq -s '.[0] + .[1]' "$TEMP_WIDGETS" "$temp_processed" > "${TEMP_WIDGETS}.tmp"
         mv "${TEMP_WIDGETS}.tmp" "$TEMP_WIDGETS"
-        echo "已合并 $(jq '.widgets | length' "$fwd_file") 个widgets"
+        rm -f "$temp_processed"
+        echo "已合并 $(jq '.widgets | length' "$fwd_file") 个widgets (已添加site字段)"
     else
         echo "警告: $fwd_file 中没有找到widgets数组"
     fi
