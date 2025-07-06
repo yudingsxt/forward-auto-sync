@@ -1,11 +1,18 @@
 {
   "repositories": [
     {
-      "name": "ForwardWidgets",
+      "name": "ForwardWidgets-huangxd",
       "url": "https://github.com/huangxd-/ForwardWidgets",
       "branch": "main",
-      "target_dir": "widgets/ForwardWidgets",
-      "description": "示例模块库"
+      "target_dir": "widgets/ForwardWidgets-huangxd",
+      "description": "ForwardWidgets by huangxd - 豆瓣和Trakt观影清单及个性化推荐"
+    },
+    {
+      "name": "ForwardWidgets-2kuai",
+      "url": "https://github.com/2kuai/ForwardWidgets",
+      "branch": "main",
+      "target_dir": "widgets/ForwardWidgets-2kuai",
+      "description": "ForwardWidgets by 2kuai - JS组件模块库"
     }
   ],
   "settings": {
