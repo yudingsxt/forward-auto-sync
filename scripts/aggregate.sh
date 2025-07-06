@@ -1,10 +1,41 @@
 #!/bin/bash
 
-# 汇聚所有ForwardWidgets仓库的.fwd文件
-# 生成统一的forward-widgets.fwd文件
-# 支持去重和版本管理
+# 汇聚Widget模块脚本
+# 用于合并所有ForwardWidgets仓库的模块到一个文件中
 
-set -e
+# 错误处理配置
+set -euo pipefail
+
+# 全局错误计数器
+ERROR_COUNT=0
+WARNING_COUNT=0
+
+# 陷阱函数：确保资源清理
+cleanup() {
+    local exit_code=$?
+    echo "清理临时文件..."
+    rm -f "$TEMP_WIDGETS" "${TEMP_WIDGETS}.tmp" 2>/dev/null || true
+    if [ $exit_code -ne 0 ]; then
+        echo "脚本异常退出，错误码: $exit_code"
+    fi
+    exit $exit_code
+}
+trap cleanup EXIT INT TERM
+
+# 错误记录函数
+log_error() {
+    echo "❌ 错误: $1" >&2
+    ((ERROR_COUNT++))
+}
+
+log_warning() {
+    echo "⚠️ 警告: $1" >&2
+    ((WARNING_COUNT++))
+}
+
+log_info() {
+    echo "ℹ️ $1"
+}
 
 echo "开始汇聚Widget模块..."
 
@@ -74,8 +105,13 @@ OUTPUT_FILE="$PROJECT_ROOT/forward-widgets.fwd"
 
 # 检查widgets目录是否存在
 if [ ! -d "$WIDGETS_DIR" ]; then
-    echo "错误: widgets目录不存在"
-    exit 1
+    log_error "widgets目录不存在: $WIDGETS_DIR"
+    log_info "尝试创建widgets目录..."
+    mkdir -p "$WIDGETS_DIR" || {
+        log_error "无法创建widgets目录，脚本终止"
+        exit 1
+    }
+    log_info "widgets目录已创建"
 fi
 
 # 创建临时文件存储合并的widgets
@@ -84,12 +120,15 @@ echo "[]" > "$TEMP_WIDGETS"
 
 # 遍历所有.fwd文件
 while IFS= read -r -d '' fwd_file; do
-    echo "处理文件: $fwd_file"
+    log_info "处理文件: $fwd_file"
     
-    # 检查文件是否为有效JSON，如果不是则跳过（只读模式，不修复）
+    # 检查文件是否为有效JSON
     if ! jq empty "$fwd_file" 2>/dev/null; then
-        echo "警告: $fwd_file JSON格式有误，跳过此文件（只读模式）"
-        echo "提示: 请检查文件中是否有多余的逗号或其他JSON语法错误"
+        log_warning "$fwd_file JSON格式有误，跳过此文件"
+        log_info "提示: 请检查文件中是否有多余的逗号或其他JSON语法错误"
+        # 尝试提供更详细的错误信息
+        jq_error=$(jq empty "$fwd_file" 2>&1 || true)
+        log_info "JSON错误详情: $jq_error"
         continue
     fi
     
@@ -114,9 +153,9 @@ while IFS= read -r -d '' fwd_file; do
         jq -s '.[0] + .[1]' "$TEMP_WIDGETS" "$temp_processed" > "${TEMP_WIDGETS}.tmp"
         mv "${TEMP_WIDGETS}.tmp" "$TEMP_WIDGETS"
         rm -f "$temp_processed"
-        echo "已合并 $widget_count 个widgets (保持原始格式)"
+        log_info "已合并 $widget_count 个widgets (保持原始格式)"
     else
-        echo "警告: $fwd_file 中没有找到widgets数组"
+        log_warning "$fwd_file 中没有找到widgets数组"
     fi
 done < <(find "$WIDGETS_DIR" -name "*.fwd" -type f -print0)
 
@@ -125,7 +164,7 @@ echo "跳过去重处理，保持所有模块..."
 TEMP_DEDUPLICATED="$TEMP_WIDGETS"
 
 # 校验模块
-echo "开始校验模块..."
+log_info "开始校验模块..."
 VALID_COUNT=0
 INVALID_COUNT=0
 
@@ -140,15 +179,16 @@ while IFS= read -r widget; do
         ((VALID_COUNT++))
     else
         ((INVALID_COUNT++))
-        echo "模块校验失败: $(echo "$widget" | jq -r '.id // "unknown"')"
+        widget_id=$(echo "$widget" | jq -r '.id // "unknown"')
+        log_warning "模块校验失败: $widget_id"
     fi
 done < <(jq -c '.[]' "$TEMP_DEDUPLICATED")
 
-echo "校验完成: 有效模块 $VALID_COUNT 个，无效模块 $INVALID_COUNT 个"
+log_info "校验完成: 有效模块 $VALID_COUNT 个，无效模块 $INVALID_COUNT 个"
 
-# 如果有无效模块，只记录警告但继续处理（只读模式）
+# 如果有无效模块，记录警告但继续处理
 if [ $INVALID_COUNT -gt 0 ]; then
-    echo "⚠️ 发现 $INVALID_COUNT 个无效模块，但继续处理（只读模式）"
+    log_warning "发现 $INVALID_COUNT 个无效模块，但继续处理（容错模式）"
 fi
 
 # 生成最终的汇聚文件（保持原始格式）
@@ -179,9 +219,9 @@ rm -f "$TEMP_WIDGETS"
 
 # 统计结果
 WIDGET_COUNT=$(jq '.widgets | length' "$OUTPUT_FILE")
-echo "汇聚完成! 共合并 $WIDGET_COUNT 个widgets"
-echo "输出文件: $OUTPUT_FILE"
-echo "原始格式文件: $SIMPLE_OUTPUT"
+log_info "汇聚完成! 共合并 $WIDGET_COUNT 个widgets"
+log_info "输出文件: $OUTPUT_FILE"
+log_info "原始格式文件: $SIMPLE_OUTPUT"
 
 # 显示汇聚文件的基本信息
 echo "\n=== 汇聚文件信息 ==="
@@ -204,3 +244,20 @@ echo "\n=== Widget列表 ==="
 jq -r '.widgets[] | "- \(.id): \(.title) (v\(.version)) - \(.author)"' "$OUTPUT_FILE"
 
 echo "\nWidget汇聚完成!"
+
+# 错误统计汇总
+echo "\n=== 执行统计 ==="
+log_info "错误数量: $ERROR_COUNT"
+log_info "警告数量: $WARNING_COUNT"
+
+# 根据错误情况决定退出状态
+if [ $ERROR_COUNT -gt 0 ]; then
+    log_error "脚本执行过程中发现 $ERROR_COUNT 个错误"
+    exit 1
+elif [ $WARNING_COUNT -gt 0 ]; then
+    log_warning "脚本执行过程中发现 $WARNING_COUNT 个警告，但已成功完成"
+    exit 0
+else
+    log_info "脚本执行完成，无错误或警告"
+    exit 0
+fi
