@@ -89,6 +89,7 @@ while IFS= read -r -d '' fwd_file; do
     # 检查文件是否为有效JSON，如果不是则跳过（只读模式，不修复）
     if ! jq empty "$fwd_file" 2>/dev/null; then
         echo "警告: $fwd_file JSON格式有误，跳过此文件（只读模式）"
+        echo "提示: 请检查文件中是否有多余的逗号或其他JSON语法错误"
         continue
     fi
     
@@ -191,7 +192,13 @@ VALID_COUNT=0
 INVALID_COUNT=0
 
 while IFS= read -r widget; do
-    if validate_widget "$widget"; then
+    # 临时禁用set -e以避免校验失败时退出
+    set +e
+    validate_widget "$widget"
+    validation_result=$?
+    set -e
+    
+    if [ $validation_result -eq 0 ]; then
         ((VALID_COUNT++))
     else
         ((INVALID_COUNT++))
