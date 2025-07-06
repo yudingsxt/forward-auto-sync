@@ -16,6 +16,9 @@ on:
 jobs:
   manual-sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
     
     steps:
     - name: 检出代码

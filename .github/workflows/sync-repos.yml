@@ -10,6 +10,9 @@ on:
 jobs:
   sync-repositories:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
     
     steps:
     - name: 检出代码
