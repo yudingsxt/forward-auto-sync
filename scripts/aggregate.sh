@@ -32,17 +32,25 @@ deduplicate_widgets() {
     
     # 使用jq进行去重，保留最新版本
     jq '
+        # 按ID分组
         group_by(.id) | 
         map(
             if length > 1 then
-                (sort_by(.version) | reverse | .[0])
+                # 如果有重复，按版本排序并取最新版本
+                (sort_by(.version | split(".") | map(tonumber)) | reverse | .[0])
             else
                 .[0]
             end
-        )
+        ) |
+        # 确保结果是唯一的
+        unique_by(.id)
     ' "$input_file" > "$output_file"
     
-    echo "去重完成，处理了 $(jq 'length' "$input_file") 个模块，去重后剩余 $(jq 'length' "$output_file") 个模块"
+    local original_count=$(jq 'length' "$input_file")
+    local deduplicated_count=$(jq 'length' "$output_file")
+    local removed_count=$((original_count - deduplicated_count))
+    
+    echo "去重完成，处理了 $original_count 个模块，去重后剩余 $deduplicated_count 个模块，移除了 $removed_count 个重复模块"
 }
 
 # 模块校验函数
@@ -75,7 +83,7 @@ TEMP_WIDGETS="$(mktemp)"
 echo "[]" > "$TEMP_WIDGETS"
 
 # 遍历所有.fwd文件
-find "$WIDGETS_DIR" -name "*.fwd" -type f | while read -r fwd_file; do
+while IFS= read -r -d '' fwd_file; do
     echo "处理文件: $fwd_file"
     
     # 检查文件是否为有效JSON，如果不是则尝试修复常见问题
@@ -113,37 +121,79 @@ find "$WIDGETS_DIR" -name "*.fwd" -type f | while read -r fwd_file; do
     if jq -e '.widgets' "$fwd_file" >/dev/null 2>&1; then
         # 转换每个widget为标准WidgetMetadata格式
         temp_processed="$(mktemp)"
-        jq '.widgets | map(
-            # 添加site字段
-            (if .author == "huangxd" then
-                . + {"site": "https://github.com/huangxd-/ForwardWidgets"}
-            elif .author == "两块" then
-                . + {"site": "https://github.com/2kuai/ForwardWidgets"}
-            else
-                . + {"site": "https://github.com/unknown/ForwardWidgets"}
-            end) |
-            # 转换为WidgetMetadata格式
-            {
-                "id": .id,
-                "title": .title,
-                "description": .description,
-                "author": .author,
-                "site": .site,
-                "version": .version,
-                "requiredVersion": .requiredVersion,
-                "modules": [
-                    {
-                        "title": .title,
-                        "description": .description,
-                        "requiresWebView": false,
-                        "functionName": (.id | gsub("[^a-zA-Z0-9]"; "_")),
-                        "sectionMode": false,
-                        "params": []
-                    }
-                ],
-                "url": .url
-            }
-        )' "$fwd_file" > "$temp_processed"
+        
+        # 根据文件路径过滤widgets，避免重复
+        if [[ "$fwd_file" == *"pack1r"* ]]; then
+            # pack1r文件只保留pack1r作者的widgets
+            jq '.widgets | map(select(.author == "pack1r")) | map(
+                # 添加site字段
+                (if .author == "huangxd" then
+                    . + {"site": "https://github.com/huangxd-/ForwardWidgets"}
+                elif .author == "两块" then
+                    . + {"site": "https://github.com/2kuai/ForwardWidgets"}
+                elif .author == "pack1r" then
+                    . + {"site": "https://github.com/pack1r/ForwardWidgets"}
+                else
+                    . + {"site": "https://github.com/unknown/ForwardWidgets"}
+                end) |
+                # 转换为WidgetMetadata格式
+                {
+                    "id": .id,
+                    "title": .title,
+                    "description": .description,
+                    "author": .author,
+                    "site": .site,
+                    "version": .version,
+                    "requiredVersion": .requiredVersion,
+                    "modules": [
+                        {
+                            "title": .title,
+                            "description": .description,
+                            "requiresWebView": false,
+                            "functionName": (.id | gsub("[^a-zA-Z0-9]"; "_")),
+                            "sectionMode": false,
+                            "params": []
+                        }
+                    ],
+                    "url": .url
+                }
+            )' "$fwd_file" > "$temp_processed"
+        else
+            # 其他文件保留所有widgets
+            jq '.widgets | map(
+                # 添加site字段
+                (if .author == "huangxd" then
+                    . + {"site": "https://github.com/huangxd-/ForwardWidgets"}
+                elif .author == "两块" then
+                    . + {"site": "https://github.com/2kuai/ForwardWidgets"}
+                elif .author == "pack1r" then
+                    . + {"site": "https://github.com/pack1r/ForwardWidgets"}
+                else
+                    . + {"site": "https://github.com/unknown/ForwardWidgets"}
+                end) |
+                # 转换为WidgetMetadata格式
+                {
+                    "id": .id,
+                    "title": .title,
+                    "description": .description,
+                    "author": .author,
+                    "site": .site,
+                    "version": .version,
+                    "requiredVersion": .requiredVersion,
+                    "modules": [
+                        {
+                            "title": .title,
+                            "description": .description,
+                            "requiresWebView": false,
+                            "functionName": (.id | gsub("[^a-zA-Z0-9]"; "_")),
+                            "sectionMode": false,
+                            "params": []
+                        }
+                    ],
+                    "url": .url
+                }
+            )' "$fwd_file" > "$temp_processed"
+        fi
         
         # 合并到主文件
         jq -s '.[0] + .[1]' "$TEMP_WIDGETS" "$temp_processed" > "${TEMP_WIDGETS}.tmp"
@@ -153,7 +203,7 @@ find "$WIDGETS_DIR" -name "*.fwd" -type f | while read -r fwd_file; do
     else
         echo "警告: $fwd_file 中没有找到widgets数组"
     fi
-done
+done < <(find "$WIDGETS_DIR" -name "*.fwd" -type f -print0)
 
 # 去重处理
 echo "开始去重处理..."

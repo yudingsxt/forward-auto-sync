@@ -4,69 +4,9 @@
   "icon": "https://assets.vvebo.vip/scripts/icon.png",
   "widgets": [
     {
-      "id": "91porn",
-      "title": "91Porn",
-      "description": "获取 91Porn 视频",
-      "author": "Baran",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "0.5.0",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "91Porn",
-          "description": "获取 91Porn 视频",
-          "requiresWebView": false,
-          "functionName": "91porn",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://github.com/baranwang/forward-widget/releases/latest/download/91porn.js"
-    },
-    {
-      "id": "Pornhub",
-      "title": "Pornhub",
-      "description": "在线观看Pornhub",
-      "author": "海带",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "1.0.4",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "Pornhub",
-          "description": "在线观看Pornhub",
-          "requiresWebView": false,
-          "functionName": "Pornhub",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://raw.githubusercontent.com/Madai-v/ForwardWidgets/refs/heads/main/Widgets/ph.js"
-    },
-    {
-      "id": "bangumi_charts_tmdb_v3",
-      "title": "Bangumi 热门榜单",
-      "description": "获取Bangumi近期热门、每日放送数据，支持榜单筛选。",
-      "author": "Autism",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "2.0.0",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "Bangumi 热门榜单",
-          "description": "获取Bangumi近期热门、每日放送数据，支持榜单筛选。",
-          "requiresWebView": false,
-          "functionName": "bangumi_charts_tmdb_v3",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://raw.githubusercontent.com/opix-maker/Forward/refs/heads/main/js/Bangumi_v2.0.0.js"
-    },
-    {
       "id": "douban",
       "title": "豆瓣我看&豆瓣个性化推荐",
-      "description": "解析豆瓣想看、在看、已看以及根据个人数据生成的个性化推荐",
+      "description": "解析豆瓣想看、在看、已看以及根据个人数据生成的个性化推荐【五折码：CHEAP.5;七折码：CHEAP】",
       "author": "huangxd",
       "site": "https://github.com/huangxd-/ForwardWidgets",
       "version": "1.0.13",
@@ -74,7 +14,7 @@
       "modules": [
         {
           "title": "豆瓣我看&豆瓣个性化推荐",
-          "description": "解析豆瓣想看、在看、已看以及根据个人数据生成的个性化推荐",
+          "description": "解析豆瓣想看、在看、已看以及根据个人数据生成的个性化推荐【五折码：CHEAP.5;七折码：CHEAP】",
           "requiresWebView": false,
           "functionName": "douban",
           "sectionMode": false,
@@ -88,7 +28,7 @@
       "title": "豆瓣",
       "description": "解析豆瓣片单，获取视频信息",
       "author": "pack1r",
-      "site": "https://github.com/unknown/ForwardWidgets",
+      "site": "https://github.com/pack1r/ForwardWidgets",
       "version": "1.0.0",
       "requiredVersion": "0.0.1",
       "modules": [
@@ -102,26 +42,6 @@
         }
       ],
       "url": "https://raw.githubusercontent.com/pack1r/ForwardWidgets/refs/heads/main/widgets/douban.js"
-    },
-    {
-      "id": "forward.combined.media.lists",
-      "title": "影视榜单",
-      "description": "聚合豆瓣、TMDB、IMDB和Bangumi的影视动画榜单",
-      "author": "阿米诺斯",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "1.2.7",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "影视榜单",
-          "description": "聚合豆瓣、TMDB、IMDB和Bangumi的影视动画榜单",
-          "requiresWebView": false,
-          "functionName": "forward_combined_media_lists",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://raw.githubusercontent.com/pack1r/ForwardWidgets/refs/heads/main/widgets/combined.js"
     },
     {
       "id": "hot_picks",
@@ -148,7 +68,7 @@
       "title": "IMDB",
       "description": "IMDB",
       "author": "pack1r",
-      "site": "https://github.com/unknown/ForwardWidgets",
+      "site": "https://github.com/pack1r/ForwardWidgets",
       "version": "1.0.0",
       "requiredVersion": "0.0.1",
       "modules": [
@@ -162,46 +82,6 @@
         }
       ],
       "url": "https://raw.githubusercontent.com/pack1r/ForwardWidgets/refs/heads/main/widgets/imdb.js"
-    },
-    {
-      "id": "imdb_discovery_final_v2",
-      "title": "IMDb 分类资源 v2",
-      "description": "聚合 IMDb 热门影视资源",
-      "author": "Autism",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "2.0.0",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "IMDb 分类资源 v2",
-          "description": "聚合 IMDb 热门影视资源",
-          "requiresWebView": false,
-          "functionName": "imdb_discovery_final_v2",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://raw.githubusercontent.com/opix-maker/Forward/refs/heads/main/js/IMDb.js"
-    },
-    {
-      "id": "jable",
-      "title": "Jable",
-      "description": "获取Jable全站视频",
-      "author": "nibiru",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "1.0.6",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "Jable",
-          "description": "获取Jable全站视频",
-          "requiresWebView": false,
-          "functionName": "jable",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://raw.githubusercontent.com/pack1r/ForwardWidgets/refs/heads/main/widgets/jable.js"
     },
     {
       "id": "live",
@@ -244,109 +124,9 @@
       "url": "https://raw.githubusercontent.com/2kuai/ForwardWidgets/refs/heads/main/Widgets/MovieParadise.js"
     },
     {
-      "id": "person.movie.tmdb",
-      "title": "TMDB人物影视作品",
-      "description": "获取 TMDB 的榜单数据",
-      "author": "Evan",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "1.0.4",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "TMDB人物影视作品",
-          "description": "获取 TMDB 的榜单数据",
-          "requiresWebView": false,
-          "functionName": "person_movie_tmdb",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://github.com/EmrysChoo/ForwardWidgets/raw/refs/heads/main/Widgets/person_movie.js"
-    },
-    {
-      "id": "ti.bemarkt.javday",
-      "title": "JAVDay",
-      "description": "获取 JAVDay 推荐",
-      "author": "Ti",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "1.1.0",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "JAVDay",
-          "description": "获取 JAVDay 推荐",
-          "requiresWebView": false,
-          "functionName": "ti_bemarkt_javday",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://raw.githubusercontent.com/pack1r/ForwardWidgets/refs/heads/main/widgets/javday.js"
-    },
-    {
-      "id": "ti.bemarkt.javrate",
-      "title": "JAVRate",
-      "description": "获取 JAVRate 推荐",
-      "author": "Ti",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "2.1.0",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "JAVRate",
-          "description": "获取 JAVRate 推荐",
-          "requiresWebView": false,
-          "functionName": "ti_bemarkt_javrate",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://raw.githubusercontent.com/pack1r/ForwardWidgets/refs/heads/main/widgets/javrate.js"
-    },
-    {
-      "id": "ti.bemarkt.podcast",
-      "title": "Podcast",
-      "description": "获取 RSS 播客数据",
-      "author": "Ti",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "2.1.0",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "Podcast",
-          "description": "获取 RSS 播客数据",
-          "requiresWebView": false,
-          "functionName": "ti_bemarkt_podcast",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://raw.githubusercontent.com/bemarkt/scripts/refs/heads/master/provider/Forward/widgets/podcast.js"
-    },
-    {
-      "id": "ti.bemarkt.vod.maccms",
-      "title": "VOD",
-      "description": "获取 VOD 影视数据",
-      "author": "Ti",
-      "site": "https://github.com/unknown/ForwardWidgets",
-      "version": "1.1.0",
-      "requiredVersion": "0.0.1",
-      "modules": [
-        {
-          "title": "VOD",
-          "description": "获取 VOD 影视数据",
-          "requiresWebView": false,
-          "functionName": "ti_bemarkt_vod_maccms",
-          "sectionMode": false,
-          "params": []
-        }
-      ],
-      "url": "https://raw.githubusercontent.com/bemarkt/scripts/refs/heads/master/provider/Forward/widgets/vod.js"
-    },
-    {
       "id": "trakt",
       "title": "Trakt我看&Trakt个性化推荐",
-      "description": "解析Trakt想看、在看、已看、片单、追剧日历以及根据个人数据生成的个性化推荐",
+      "description": "解析Trakt想看、在看、已看、片单、追剧日历以及根据个人数据生成的个性化推荐【五折码：CHEAP.5;七折码：CHEAP】",
       "author": "huangxd",
       "site": "https://github.com/huangxd-/ForwardWidgets",
       "version": "1.0.11",
@@ -354,7 +134,7 @@
       "modules": [
         {
           "title": "Trakt我看&Trakt个性化推荐",
-          "description": "解析Trakt想看、在看、已看、片单、追剧日历以及根据个人数据生成的个性化推荐",
+          "description": "解析Trakt想看、在看、已看、片单、追剧日历以及根据个人数据生成的个性化推荐【五折码：CHEAP.5;七折码：CHEAP】",
           "requiresWebView": false,
           "functionName": "trakt",
           "sectionMode": false,
@@ -386,7 +166,7 @@
     {
       "id": "yatu",
       "title": "雅图(每日放送+点播排行榜+评分排行榜)",
-      "description": "解析雅图每日放送更新以及各类排行榜",
+      "description": "解析雅图每日放送更新以及各类排行榜【五折码：CHEAP.5;七折码：CHEAP】",
       "author": "huangxd",
       "site": "https://github.com/huangxd-/ForwardWidgets",
       "version": "1.0.6",
@@ -394,7 +174,7 @@
       "modules": [
         {
           "title": "雅图(每日放送+点播排行榜+评分排行榜)",
-          "description": "解析雅图每日放送更新以及各类排行榜",
+          "description": "解析雅图每日放送更新以及各类排行榜【五折码：CHEAP.5;七折码：CHEAP】",
           "requiresWebView": false,
           "functionName": "yatu",
           "sectionMode": false,
@@ -406,7 +186,7 @@
     {
       "id": "zhuijurili",
       "title": "追剧日历(今/明日播出、各项榜单、今日推荐)",
-      "description": "解析追剧日历今/明日播出剧集/番剧/国漫/综艺、各项榜单、今日推荐等",
+      "description": "解析追剧日历今/明日播出剧集/番剧/国漫/综艺、各项榜单、今日推荐等【五折码：CHEAP.5;七折码：CHEAP】",
       "author": "huangxd",
       "site": "https://github.com/huangxd-/ForwardWidgets",
       "version": "1.0.3",
@@ -414,7 +194,7 @@
       "modules": [
         {
           "title": "追剧日历(今/明日播出、各项榜单、今日推荐)",
-          "description": "解析追剧日历今/明日播出剧集/番剧/国漫/综艺、各项榜单、今日推荐等",
+          "description": "解析追剧日历今/明日播出剧集/番剧/国漫/综艺、各项榜单、今日推荐等【五折码：CHEAP.5;七折码：CHEAP】",
           "requiresWebView": false,
           "functionName": "zhuijurili",
           "sectionMode": false,
