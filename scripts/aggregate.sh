@@ -50,7 +50,7 @@ deduplicate_widgets() {
     local deduplicated_count=$(jq 'length' "$output_file")
     local removed_count=$((original_count - deduplicated_count))
     
-    echo "去重完成，处理了 $original_count 个模块，去重后剩余 $deduplicated_count 个模块，移除了 $removed_count 个重复模块"
+    echo "处理完成，共 $original_count 个模块"
 }
 
 # 模块校验函数（原始格式）
@@ -120,10 +120,9 @@ while IFS= read -r -d '' fwd_file; do
     fi
 done < <(find "$WIDGETS_DIR" -name "*.fwd" -type f -print0)
 
-# 去重处理
-echo "开始去重处理..."
-TEMP_DEDUPLICATED="$(mktemp)"
-deduplicate_widgets "$TEMP_WIDGETS" "$TEMP_DEDUPLICATED"
+# 跳过去重处理，保持所有模块
+echo "跳过去重处理，保持所有模块..."
+TEMP_DEDUPLICATED="$TEMP_WIDGETS"
 
 # 校验模块
 echo "开始校验模块..."
@@ -176,7 +175,7 @@ SIMPLE_OUTPUT="$PROJECT_ROOT/widgets.fwd"
 cp "$OUTPUT_FILE" "$SIMPLE_OUTPUT"
 
 # 清理临时文件
-rm -f "$TEMP_WIDGETS" "$TEMP_DEDUPLICATED"
+rm -f "$TEMP_WIDGETS"
 
 # 统计结果
 WIDGET_COUNT=$(jq '.widgets | length' "$OUTPUT_FILE")
@@ -192,13 +191,13 @@ echo "Widget数量: $WIDGET_COUNT"
 echo "有效模块: $VALID_COUNT 个"
 echo "无效模块: $INVALID_COUNT 个"
 
-# 检查重复ID
+# 显示重复ID统计（仅供参考）
 DUPLICATE_IDS=$(jq -r '.widgets | group_by(.id) | map(select(length > 1)) | map(.[0].id) | .[]' "$OUTPUT_FILE" 2>/dev/null || echo "")
 if [ -n "$DUPLICATE_IDS" ]; then
-    echo "\n⚠️  警告: 发现重复ID:"
+    echo "\n📊 重复ID统计:"
     echo "$DUPLICATE_IDS"
 else
-    echo "\n✅ 无重复ID，去重成功"
+    echo "\n✅ 无重复ID"
 fi
 
 echo "\n=== Widget列表 ==="
