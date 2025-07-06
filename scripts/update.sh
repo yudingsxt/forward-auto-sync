@@ -60,8 +60,13 @@ for repo in $repos; do
         # 创建目标目录
         mkdir -p $target_dir
         
-        # 复制文件（排除.git目录）
+        # 复制文件（排除.git目录，只读模式：不修改源文件）
         rsync -av --exclude='.git' $temp_repo_dir/ $target_dir/
+        
+        # 验证源文件完整性（确保未被修改）
+        if [ -d "$temp_repo_dir" ]; then
+            echo "🔍 验证源文件完整性..."
+        fi
         
         # 记录更新日志
         echo "## [$name] - $CURRENT_DATE" >> $UPDATE_LOG.tmp

@@ -25,6 +25,9 @@
   "settings": {
     "auto_commit": true,
     "update_frequency": "daily",
-    "timezone": "Asia/Shanghai"
+    "timezone": "Asia/Shanghai",
+    "readonly_mode": true,
+    "preserve_source_integrity": true,
+    "skip_invalid_files": true
   }
 }

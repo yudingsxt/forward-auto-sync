@@ -1,7 +1,7 @@
 {
   "name": "forward-auto-updater",
-  "version": "1.0.21",
-  "description": "自动更新模块库项目",
+  "version": "1.1.0",
+  "description": "纯聚合自动更新模块库项目 - 只读模式，不修改源文件",
   "main": "index.js",
   "scripts": {
     "update": "bash scripts/update.sh"
@@ -13,7 +13,9 @@
   "keywords": [
     "automation",
     "github-actions",
-    "module-updater"
+    "module-updater",
+    "readonly-aggregation",
+    "source-integrity"
   ],
   "author": "ershiwushideshuimian",
   "license": "MIT"
