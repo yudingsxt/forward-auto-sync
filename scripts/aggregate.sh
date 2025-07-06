@@ -57,25 +57,47 @@ find "$WIDGETS_DIR" -name "*.fwd" -type f | while read -r fwd_file; do
         fi
     fi
     
-    # 提取widgets数组并合并，同时添加site字段
+    # 提取widgets数组并转换为标准WidgetMetadata格式
     if jq -e '.widgets' "$fwd_file" >/dev/null 2>&1; then
-        # 为每个widget添加site字段
+        # 转换每个widget为标准WidgetMetadata格式
         temp_processed="$(mktemp)"
         jq '.widgets | map(
-            if .author == "huangxd" then
+            # 添加site字段
+            (if .author == "huangxd" then
                 . + {"site": "https://github.com/huangxd-/ForwardWidgets"}
             elif .author == "两块" then
                 . + {"site": "https://github.com/2kuai/ForwardWidgets"}
             else
                 . + {"site": "https://github.com/unknown/ForwardWidgets"}
-            end
+            end) |
+            # 转换为WidgetMetadata格式
+            {
+                "id": .id,
+                "title": .title,
+                "description": .description,
+                "author": .author,
+                "site": .site,
+                "version": .version,
+                "requiredVersion": .requiredVersion,
+                "modules": [
+                    {
+                        "title": .title,
+                        "description": .description,
+                        "requiresWebView": false,
+                        "functionName": (.id | gsub("[^a-zA-Z0-9]"; "_")),
+                        "sectionMode": false,
+                        "params": []
+                    }
+                ],
+                "url": .url
+            }
         )' "$fwd_file" > "$temp_processed"
         
         # 合并到主文件
         jq -s '.[0] + .[1]' "$TEMP_WIDGETS" "$temp_processed" > "${TEMP_WIDGETS}.tmp"
         mv "${TEMP_WIDGETS}.tmp" "$TEMP_WIDGETS"
         rm -f "$temp_processed"
-        echo "已合并 $(jq '.widgets | length' "$fwd_file") 个widgets (已添加site字段)"
+        echo "已合并 $(jq '.widgets | length' "$fwd_file") 个widgets (已转换为WidgetMetadata格式)"
     else
         echo "警告: $fwd_file 中没有找到widgets数组"
     fi
