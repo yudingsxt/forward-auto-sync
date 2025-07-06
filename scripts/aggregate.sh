@@ -44,8 +44,8 @@ echo "汇聚完成！共 $total_widgets 个widgets"
 
 # 生成.fwd格式文件
 jq -n --argjson widgets "$(cat "$TEMP_WIDGETS")" '{
-  "title": "Forward Widgets Collection",
-  "description": "汇聚的Forward Widgets模块集合",
+  "title": "Widgets Collection",
+  "description": "Forward Widgets模块集合",
   "icon": "https://assets.vvebo.vip/scripts/icon.png",
   "widgets": $widgets
 }' > "$OUTPUT_FILE"
