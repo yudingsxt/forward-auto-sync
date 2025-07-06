@@ -80,6 +80,24 @@ for repo in $repos; do
     fi
 done
 
+# 汇聚Widget模块（在版本更新之前）
+echo "🔗 汇聚Widget模块..."
+if [ -f "scripts/aggregate.sh" ]; then
+    ./scripts/aggregate.sh
+    if [ $? -eq 0 ]; then
+        echo "✅ Widget汇聚完成！"
+        # 检查汇聚是否产生了新文件
+        if [ -n "$(git status --porcelain forward-widgets.fwd 2>/dev/null)" ]; then
+            HAS_UPDATES=true
+            echo "📝 汇聚产生了新的更改"
+        fi
+    else
+        echo "⚠️  Widget汇聚失败，但不影响主流程"
+    fi
+else
+    echo "⚠️  汇聚脚本不存在，跳过汇聚步骤"
+fi
+
 # 如果有更新，提交更改
 if [ "$HAS_UPDATES" = true ]; then
     echo "\n📝 更新版本号和日志..."
@@ -96,6 +114,10 @@ if [ "$HAS_UPDATES" = true ]; then
         rm $UPDATE_LOG.tmp
     fi
     
+    # 在更新版本号之前，先暂存所有更改
+    echo "📋 暂存所有更改..."
+    git add .
+    
     # 更新版本号
     npm version patch --no-git-tag-version
     NEW_VERSION=$(cat package.json | jq -r '.version')
@@ -104,19 +126,6 @@ if [ "$HAS_UPDATES" = true ]; then
     echo "📋 更新的仓库数量: $(echo "$repos" | wc -l)"
 else
     echo "\n✨ 所有仓库都是最新的！"
-fi
-
-# 汇聚Widget模块
-echo "🔗 汇聚Widget模块..."
-if [ -f "scripts/aggregate.sh" ]; then
-    ./scripts/aggregate.sh
-    if [ $? -eq 0 ]; then
-        echo "✅ Widget汇聚完成！"
-    else
-        echo "⚠️  Widget汇聚失败，但不影响主流程"
-    fi
-else
-    echo "⚠️  汇聚脚本不存在，跳过汇聚步骤"
 fi
 
 # 清理临时文件
