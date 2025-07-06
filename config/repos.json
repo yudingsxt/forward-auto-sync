@@ -13,7 +13,14 @@
       "branch": "main",
       "target_dir": "widgets/ForwardWidgets-2kuai",
       "description": "ForwardWidgets by 2kuai - JS组件模块库"
-    }
+    },
+    {
+      "name": "ForwardWidgets-2kuai",
+      "url": "https://github.com/pack1r/ForwardWidgets",
+      "branch": "main",
+      "target_dir": "widgets/ForwardWidgets-2kuai",
+      "description": "ForwardWidgets by pack1r - JS组件模块库"
+    }    
   ],
   "settings": {
     "auto_commit": true,
