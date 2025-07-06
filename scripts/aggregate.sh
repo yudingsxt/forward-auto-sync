@@ -35,17 +35,16 @@ find "$WIDGETS_DIR" -name "*.fwd" -type f | while read -r fwd_file; do
         cp "$fwd_file" "$temp_file"
         
         # 修复多种常见的JSON格式问题
-        # 1. 修复数组末尾多余逗号: },\n  ]
-        sed -i '' '/},$/{
-N
-s/},\n\([ \t]*\]\)/}\n\1/
-}' "$temp_file"
-        
-        # 2. 修复对象末尾多余逗号: },\n}
-        sed -i '' '/},$/{
-N
-s/},\n\([ \t]*}\)/}\n\1/
-}' "$temp_file"
+        # 检测操作系统并使用相应的sed语法
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            # macOS
+            sed -i '' 's/},\s*]/}]/g' "$temp_file"
+            sed -i '' 's/},\s*}/}}/g' "$temp_file"
+        else
+            # Linux
+            sed -i 's/},\s*]/}]/g' "$temp_file"
+            sed -i 's/},\s*}/}}/g' "$temp_file"
+        fi
         
         # 再次检查是否修复成功
         if jq empty "$temp_file" 2>/dev/null; then
