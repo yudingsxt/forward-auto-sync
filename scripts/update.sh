@@ -87,7 +87,7 @@ if [ -f "scripts/aggregate.sh" ]; then
     if [ $? -eq 0 ]; then
         echo "✅ Widget汇聚完成！"
         # 检查汇聚是否产生了新文件
-        if [ -n "$(git status --porcelain forward-widgets.fwd 2>/dev/null)" ]; then
+        if [ -n "$(git status --porcelain forward-widgets.fwd widgets.fwd 2>/dev/null)" ]; then
             HAS_UPDATES=true
             echo "📝 汇聚产生了新的更改"
         fi
