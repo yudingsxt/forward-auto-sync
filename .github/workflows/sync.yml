@@ -1,0 +1,86 @@
+name: 模块库同步
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      repository_name:
+        description: '指定要更新的仓库名称（留空则更新所有）'
+        required: false
+        type: string
+      force_update:
+        description: '强制更新（即使没有变更）'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: 设置环境
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    
+    - name: 设置Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: 安装依赖
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq rsync
+        chmod +x scripts/update.sh
+    
+    - name: 处理手动参数
+      if: github.event_name == 'workflow_dispatch' && github.event.inputs.repository_name != ''
+      run: |
+        jq --arg name "${{ github.event.inputs.repository_name }}" '.repositories = [.repositories[] | select(.name == $name)]' config/repos.json > config/repos.tmp.json
+        mv config/repos.tmp.json config/repos.json
+    
+    - name: 执行更新
+      run: bash scripts/update.sh
+    
+    - name: 检查更改
+      id: check
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: 更新版本
+      id: version
+      if: steps.check.outputs.has_changes == 'true' || github.event.inputs.force_update == 'true'
+      run: |
+        CURRENT=$(cat package.json | jq -r '.version')
+        NEW=$(echo $CURRENT | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+        jq --arg version "$NEW" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
+        echo "new_version=$NEW" >> $GITHUB_OUTPUT
+        
+    - name: 提交更改
+      if: steps.check.outputs.has_changes == 'true' || github.event.inputs.force_update == 'true'
+      run: |
+        git add .
+        git commit -m "🤖 自动更新模块库 v${{ steps.version.outputs.new_version }}"
+        git push
+    
+    - name: 创建标签
+      if: steps.check.outputs.has_changes == 'true'
+      run: |
+        git tag -a "v${{ steps.version.outputs.new_version }}" -m "v${{ steps.version.outputs.new_version }}"
+        git push origin "v${{ steps.version.outputs.new_version }}"
