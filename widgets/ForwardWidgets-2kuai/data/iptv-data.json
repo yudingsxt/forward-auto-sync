@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-07-16T01:05:03.512615",
+  "last_updated": "2025-07-17T01:04:46.538787",
   "cctv": [
     {
       "name": "CCTV-1 综合",
@@ -49,7 +49,9 @@
       "name": "CCTV-5 体育",
       "description": "中国中央电视台体育频道，是中国最权威的专业体育电视频道，提供国内外重大体育赛事直播、体育新闻和专题节目，涵盖足球、篮球、排球、乒乓球等多种体育项目。",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-CCTV5.png,lfo-center,l-end,l-end/CCTV5.png",
-      "childItems": []
+      "childItems": [
+        "rtmp://weishi.hyuui.top/weishi/1234_cctv5"
+      ]
     },
     {
       "name": "CCTV-5+ 体育赛事",
@@ -120,6 +122,7 @@
       "description": "中国中央电视台新闻频道，是中国首个24小时全天候播出的专业新闻频道，提供国内外重大新闻事件的即时报道、深度分析和权威解读，是中国最具影响力的新闻媒体之一。",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-CCTV13.png,lfo-center,l-end,l-end/CCTV13.png",
       "childItems": [
+        "http://tencentplaygsm.gztv.com/live/jingsai.m3u8",
         "rtmp://weishi.hyuui.top/weishi/1234_cctv13"
       ]
     },
@@ -172,7 +175,7 @@
     {
       "name": "CCTV 央视高网",
       "description": "CCTV 央视高网频道，致力于播出高水平网球赛事和相关体育内容，服务广大网球爱好者。",
-      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-央视高网.png,lfo-center,l-end,l-end/央视高网.png",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.2,h-bh_mul_3.7,bg-848484,lfo-center,l-image,i-央视高网.png,lfo-center,l-end,l-end/央视高网.png",
       "childItems": [
         "http://www.lizhinas.top:1009/rtp/239.252.219.95:5140"
       ]
@@ -191,6 +194,22 @@
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.1,h-bh_mul_2.8,bg-848484,lfo-center,l-image,i-兵器科技.png,lfo-center,l-end,l-end/兵器科技.png",
       "childItems": [
         "http://www.lizhinas.top:1009/rtp/239.252.219.98:5140"
+      ]
+    },
+    {
+      "name": "CCTV 风云足球",
+      "description": "CCTV 风云足球是央视旗下专业足球频道，全天候呈现国内外顶级赛事、经典回顾、专题节目及深度解析。涵盖欧冠、五大联赛、中超等精彩内容，为球迷打造纯正的足球盛宴，传递激情与荣耀。",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.1,h-bh_mul_2.8,bg-848484,lfo-center,l-image,i-风云足球.png,lfo-center,l-end,l-end/风云足球.png",
+      "childItems": [
+        "http://www.lizhinas.top:1009/rtp/239.252.219.96:5140"
+      ]
+    },
+    {
+      "name": "CCTV 风云音乐",
+      "description": "CCTV 风云音乐是央视旗下专业音乐频道，汇聚全球流行、古典、摇滚等多元音乐风格，提供演唱会、MV、音乐盛典及独家专访。24小时不间断放送高品质音乐内容，为乐迷打造沉浸式视听享受，传递音乐魅力与艺术之美。",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.1,h-bh_mul_2.8,bg-848484,lfo-center,l-image,i-风云音乐.png,lfo-center,l-end,l-end/风云音乐.png",
+      "childItems": [
+        "http://www.lizhinas.top:1009/rtp/239.252.219.87:5140"
       ]
     }
   ],
@@ -228,9 +247,7 @@
       "name": "吉林卫视",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-吉林卫视.png,lfo-center,l-end,l-end/吉林卫视.png",
       "description": "吉林广播电视台旗下的卫星频道，以故乡的月亮为呼号，立足吉林、面向全国，突出东北地域特色，播出新闻、综艺、电视剧等节目。",
-      "childItems       ": [
-        "http://qwt.zhibotv.top:2016/全网通.php?id=吉林卫视"
-      ]
+      "childItems": []
     },
     {
       "name": "辽宁卫视",
@@ -292,7 +309,9 @@
       "name": "河南卫视",
       "description": "河南广播电视台旗下的卫星频道，以文化河南，中华源为定位，深度挖掘和传播华夏历史文明，打造了《唐宫夜宴》等一系列文化精品节目。",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-河南卫视.png,lfo-center,l-end,l-end/河南卫视.png",
-      "childItems": []
+      "childItems": [
+        "http://1.94.31.214/php/hntv.php?id=hnws"
+      ]
     },
     {
       "name": "江西卫视",
@@ -312,7 +331,9 @@
       "name": "东南卫视",
       "description": "福建省广播影视集团旗下的卫星频道，以海洋时代，中华情怀为定位，立足福建，面向台湾和海外华人，是连接两岸三地的重要桥梁。",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-东南卫视.png,lfo-center,l-end,l-end/东南卫视.png",
-      "childItems": []
+      "childItems": [
+        "http://8.138.7.223/tv/fjtv1.php?id=dnws"
+      ]
     },
     {
       "name": "广西卫视",
@@ -347,6 +368,14 @@
       ]
     },
     {
+      "name": "厦门卫视",
+      "description": "",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-海南卫视.png,lfo-center,l-end,l-end/海南卫视.png",
+      "childItems": [
+        "http://8.138.7.223/tv/fjtv1.php?id=xmws"
+      ]
+    },
+    {
       "name": "内蒙古卫视",
       "description": "内蒙古广播电视台旗下的卫星频道，是中国唯一用蒙古语和汉语两种语言播出的卫星频道，展示草原文化和内蒙古的独特魅力。",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-内蒙古卫视.png,lfo-center,l-end,l-end/内蒙古卫视.png",
@@ -376,8 +405,8 @@
       "description": "浙江广播电视集团旗下的专业新闻频道，24小时不间断提供浙江省内外新闻资讯，重点关注浙江经济社会发展动态和民生热点问题。",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_2,h-bh_mul_3,bg-848484,lfo-center,l-image,i-浙江新闻.png,lfo-center,l-end,l-end/浙江新闻.png",
       "childItems": [
-        "https://ali-m-l.cztv.com/channels/lantian/channel007/1080p.m3u8",
-        "https://stream1.freetv.fun/7fa07158e038a9bae3747a0cb9f8e8ff1aaba32669d28d99a498716f16569c1d.m3u8"
+        "https://stream1.freetv.fun/7fa07158e038a9bae3747a0cb9f8e8ff1aaba32669d28d99a498716f16569c1d.m3u8",
+        "https://ali-m-l.cztv.com/channels/lantian/channel007/1080p.m3u8"
       ]
     },
     {
@@ -402,6 +431,70 @@
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_2.3,h-bh_mul_3,bg-848484,lfo-center,l-image,i-浙江民生休闲.png,lfo-center,l-end,l-end/浙江民生休闲.png",
       "childItems": [
         "https://ali-m-l.cztv.com/channels/lantian/channel006/1080p.m3u8"
+      ]
+    },
+    {
+      "name": "浙江教科",
+      "description": "",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_2.3,h-bh_mul_3,bg-848484,lfo-center,l-image,i-浙江教科影视.png,lfo-center,l-end,l-end/浙江教科影视.png",
+      "childItems": [
+        "https://ali-m-l.cztv.com/channels/lantian/channel004/1080p.m3u8"
+      ]
+    },
+    {
+      "name": "浙江国际",
+      "description": "",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-浙江国际.png,lfo-center,l-end,l-end/浙江国际.png",
+      "childItems": [
+        "https://ali-m-l.cztv.com/channels/lantian/channel010/1080p.m3u8"
+      ]
+    },
+    {
+      "name": "河南新闻",
+      "description": "",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-河南新闻.png,lfo-center,l-end,l-end/河南新闻.png",
+      "childItems": [
+        "http://www.cdnstv.com:6398/hls/1114/index.m3u8"
+      ]
+    },
+    {
+      "name": "湖南爱晚",
+      "description": "",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.8,h-bh_mul_3.5,bg-848484,lfo-center,l-image,i-湖南爱晚.png,lfo-center,l-end,l-end/湖南爱晚.png",
+      "childItems": [
+        "http://p2.vzan.com/527645544/149039617847513156/live.m3u8"
+      ]
+    },
+    {
+      "name": "河南都市",
+      "description": "",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-河南都市.png,lfo-center,l-end,l-end/河南都市.png",
+      "childItems": [
+        "http://www.lwfz.fun:8800/rtp/239.16.20.164:11640"
+      ]
+    },
+    {
+      "name": "福建旅游",
+      "description": "",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.6,h-bh_mul_4,bg-848484,lfo-center,l-image,i-福建旅游.png,lfo-center,l-end,l-end/福建旅游.png",
+      "childItems": [
+        "http://8.138.7.223/tv/fjtv1.php?id=fjly"
+      ]
+    },
+    {
+      "name": "福建经济",
+      "description": "",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.6,h-bh_mul_4,bg-848484,lfo-center,l-image,i-福建经济.png,lfo-center,l-end,l-end/福建经济.png",
+      "childItems": [
+        "http://8.138.7.223/tv/fjtv1.php?id=fjjj"
+      ]
+    },
+    {
+      "name": "福建文体",
+      "description": "",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.6,h-bh_mul_4,bg-848484,lfo-center,l-image,i-福建文体.png,lfo-center,l-end,l-end/福建文体.png",
+      "childItems": [
+        "http://8.138.7.223/tv/fjtv1.php?id=fjwt"
       ]
     }
   ]
