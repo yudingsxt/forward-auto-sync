@@ -1,13 +1,11 @@
 {
-  "last_updated": "2025-07-19T01:03:41.461852",
+  "last_updated": "2025-07-20T01:11:39.050738",
   "cctv": [
     {
       "name": "CCTV-1 综合",
       "description": "中国中央电视台综合频道，是中央广播电视总台拥有的一条以普通话广播为主的综合节目频道，中国中央电视台的主频道，为中国大陆发展最早、覆盖最广、影响力最大的电视频道。",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-CCTV1.png,lfo-center,l-end,l-end/CCTV1.png",
-      "childItems": [
-        "rtmp://weishi.hyuui.top/weishi/1234_cctv1A"
-      ]
+      "childItems": []
     },
     {
       "name": "CCTV-2 财经",
@@ -89,9 +87,7 @@
       "name": "CCTV-9 纪录",
       "description": "中国中央电视台纪录频道，是中国首个全国性专业纪录片频道，以全球视野、中国视角为定位，播出国内外优秀纪录片作品，涵盖自然、历史、科技、人文等多个领域。",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-CCTV9.png,lfo-center,l-end,l-end/CCTV9.png",
-      "childItems": [
-        "rtmp://weishi.hyuui.top/weishi/1234_cctv9"
-      ]
+      "childItems": []
     },
     {
       "name": "CCTV-10 科教",
@@ -190,7 +186,9 @@
       "name": "CCTV 风云足球",
       "description": "CCTV 风云足球是央视旗下专业足球频道，全天候呈现国内外顶级赛事、经典回顾、专题节目及深度解析。涵盖欧冠、五大联赛、中超等精彩内容，为球迷打造纯正的足球盛宴，传递激情与荣耀。",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.1,h-bh_mul_2.8,bg-848484,lfo-center,l-image,i-风云足球.png,lfo-center,l-end,l-end/风云足球.png",
-      "childItems": []
+      "childItems": [
+        "https://epg.pw/stream/ac8062ec9484078061d3bef507c15a423ac57ae4144e3fcc4b0a198dd420f911.m3u8"
+      ]
     },
     {
       "name": "CCTV 风云音乐",
@@ -262,6 +260,14 @@
       "description": "陕西广播电视台旗下的卫星电视频道，以传承中华文明、展示陕西形象为宗旨，突出历史文化特色，提供新闻、文化、旅游等多元化节目内容。",
       "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-陕西卫视.png,lfo-center,l-end,l-end/陕西卫视.png",
       "childItems": []
+    },
+    {
+      "name": "安徽卫视",
+      "description": "",
+      "backdrop_path": "https://ik.imagekit.io/2kuai/tr:l-image,i-TV.png,w-bw_mul_1.5,h-bh_mul_4,bg-848484,lfo-center,l-image,i-安徽卫视.png,lfo-center,l-end,l-end/安徽卫视.png",
+      "childItems": [
+        "http://222.169.85.8:9901/tsfile/live/0130_1.m3u8"
+      ]
     },
     {
       "name": "山东卫视",
