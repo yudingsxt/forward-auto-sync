@@ -8,7 +8,7 @@
       "title": "91Porn",
       "description": "获取 91Porn 视频",
       "requiredVersion": "0.0.1",
-      "version": "0.5.0",
+      "version": "0.9.4",
       "author": "Baran",
       "url": "https://github.com/baranwang/forward-widget/releases/latest/download/91porn.js"
     },
@@ -71,7 +71,7 @@
       "title": "Podcast",
       "description": "获取 RSS 播客数据",
       "requiredVersion": "0.0.1",
-      "version": "1.0.0",
+      "version": "2.1.0",
       "author": "Ti",
       "url": "https://raw.githubusercontent.com/bemarkt/scripts/refs/heads/master/provider/Forward/widgets/podcast.js"
     },
@@ -80,7 +80,7 @@
       "title": "Pornhub",
       "description": "在线观看Pornhub",
       "requiredVersion": "0.0.1",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "author": "海带",
       "url": "https://raw.githubusercontent.com/Madai-v/ForwardWidgets/refs/heads/main/Widgets/ph.js"
     },
@@ -188,7 +188,7 @@
       "title": "豆瓣我看&豆瓣个性化推荐",
       "description": "解析豆瓣想看、在看、已看以及根据个人数据生成的个性化推荐",
       "requiredVersion": "0.0.1",
-      "version": "1.0.13",
+      "version": "1.0.15",
       "author": "huangxd",
       "url": "https://raw.githubusercontent.com/huangxd-/ForwardWidgets/refs/heads/main/widgets/douban.js"
     },
@@ -197,7 +197,7 @@
       "title": "追剧日历(今/明日播出、各项榜单、今日推荐)",
       "description": "解析追剧日历今/明日播出剧集/番剧/国漫/综艺、各项榜单、今日推荐等",
       "requiredVersion": "0.0.1",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "author": "huangxd",
       "url": "https://raw.githubusercontent.com/huangxd-/ForwardWidgets/refs/heads/main/widgets/zhuijurili.js"
     },
