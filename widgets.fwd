@@ -121,6 +121,15 @@
       "url": "https://raw.githubusercontent.com/bemarkt/scripts/refs/heads/master/provider/Forward/widgets/vod.js"
     },
     {
+      "id": "vod_sream",
+      "title": "VOD Stream",
+      "description": "获取聚合VOD影片资源",
+      "requiredVersion": "0.0.1",
+      "version": "1.0.0",
+      "author": "两块",
+      "url": "https://raw.githubusercontent.com/2kuai/ForwardWidgets/refs/heads/main/Widgets/VodStream.js"
+    },
+    {
       "id": "unknow.baranwang.xvideos",
       "title": "XVideos",
       "description": "Xvideos",
@@ -137,15 +146,6 @@
       "version": "1.0.3",
       "author": "huangxd",
       "url": "https://raw.githubusercontent.com/huangxd-/ForwardWidgets/refs/heads/main/widgets/danmu_api.js"
-    },
-    {
-      "id": "cloud_cinema",
-      "title": "云端影院",
-      "description": "获取在线云端资源",
-      "requiredVersion": "0.0.1",
-      "version": "1.0.0",
-      "author": "两块",
-      "url": "https://raw.githubusercontent.com/2kuai/ForwardWidgets/refs/heads/main/Widgets/CloudCinema.js"
     },
     {
       "id": "ddys_vod",
