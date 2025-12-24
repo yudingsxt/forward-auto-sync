@@ -121,15 +121,6 @@
       "url": "https://raw.githubusercontent.com/bemarkt/scripts/refs/heads/master/provider/Forward/widgets/vod.js"
     },
     {
-      "id": "vod_sream",
-      "title": "VOD Stream",
-      "description": "获取聚合VOD影片资源",
-      "requiredVersion": "0.0.1",
-      "version": "1.0.0",
-      "author": "两块",
-      "url": "https://raw.githubusercontent.com/2kuai/ForwardWidgets/refs/heads/main/Widgets/VodStream.js"
-    },
-    {
       "id": "unknow.baranwang.xvideos",
       "title": "XVideos",
       "description": "Xvideos",
@@ -164,15 +155,6 @@
       "version": "1.0.0",
       "author": "两块",
       "url": "https://raw.githubusercontent.com/2kuai/ForwardWidgets/refs/heads/main/Widgets/MovieParadise.js"
-    },
-    {
-      "id": "ystt.vod",
-      "title": "影视天堂",
-      "description": "影视天堂影片资源",
-      "requiredVersion": "0.0.1",
-      "version": "1.0.0",
-      "author": "两块",
-      "url": "https://raw.githubusercontent.com/2kuai/ForwardWidgets/refs/heads/main/Widgets/ystt.js"
     },
     {
       "id": "forward.combined.media.lists",
